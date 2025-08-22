@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres_db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: StoreProject          
+      POSTGRES_USER: postgres       
+      POSTGRES_PASSWORD: dt2711
+    volumes:
+      - pg_data:/var/lib/postgresql/pg_data
+volumes:
+pg_data:
