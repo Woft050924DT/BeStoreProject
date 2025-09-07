@@ -5,15 +5,18 @@ import { JwtStrategy } from '../jwt/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from '../user/user.module';
 import { ConfigModule } from '@nestjs/config';
-
+import { MailModule } from "../mail/mail.module";
+import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
+    PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-here',
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN || '7d' },
     }),
     UserModule,
     ConfigModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

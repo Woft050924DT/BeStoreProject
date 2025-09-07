@@ -1,8 +1,7 @@
 import {Users} from '../../user/user.entity'
 export interface GGUser{
     email: string;
-    firstName: string; 
-    lastName: string;
+    fullName: string; 
     picture: string;
     googleId: string;
     accessToken: string; 
@@ -10,8 +9,7 @@ export interface GGUser{
 export interface JwtPayload {
     sub: string;
     email:string; 
-    firstName?: string;
-    lastName?: string;
+    fullName?: string;
     iat?: number;
     exp?: number;
 }

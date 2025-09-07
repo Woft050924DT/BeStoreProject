@@ -1,9 +1,13 @@
 export class Users {
-    id: string; 
+    id: number; 
+    username: string;
     email: string; 
-    firstName?: string;
-    lastName?:  string;
+    fullName?: string;
+    gender?: string;
+    dateOfBirth?: Date;
+    address?: string;
+    avatar?: string;
     picture?: string; 
     googleId?: string;
-    privider?: string;
+    provider?: string;
 }

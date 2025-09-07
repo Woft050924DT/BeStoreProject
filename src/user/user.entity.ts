@@ -1,49 +1,79 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+  Index,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity('users')
+@Index(['email'])
+@Index(['username'])
 export class Users {
-  @PrimaryColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column()
-  email: string;
+  @Column({ unique: true })
+  @Index()
+  username: string;
+
+  @Column({ unique: true, nullable: true })
+  @Index()
+  email?: string;
 
   @Column({ name: 'password' })
   password: string;
 
   @Column({ name: 'full_name', nullable: true })
-  fullName: string;
+  fullName?: string;
 
-  @Column ({ name: 'first_name', nullable: true})
-  firstName?: string;
+  @Column({ name: 'gender', type: 'varchar', length: 10, nullable: true })
+  gender?: string;
 
-  @Column({ name: 'last_name',nullable: true })
-  lastName?: string;
+  @Column({ name: 'date_of_birth', type: 'date', nullable: true })
+  dateOfBirth?: Date;
 
-  @Column({ name: 'picture', nullable: true })
-  picture: string; 
-  
-  @Column({ name: 'googleid',nullable: true })
-  googleId: string;
+  @Column({ name: 'phone', nullable: true })
+  phone?: string;
 
-  @Column({ name:'provider',nullable: true })
-  provider: string;
+  @Column({ name: 'address', type: 'text', nullable: true })
+  address?: string;
 
-  @Column({ name:'phone',nullable: true })
-  phone: string;
+  @Column({ name: 'avatar', nullable: true })
+  avatar?: string;
 
-  @Column({ name:'phone',nullable: true })
-  role: string;
+  @Column({ name: 'status', type: 'boolean', default: true })
+  status: boolean;
 
-  @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  @Column({ name: 'last_login', type: 'timestamp', nullable: true })
+  lastLogin?: Date;
 
-  @Column({ name: 'created_at', type: 'timestamp', nullable: true })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @Column({ name: 'updated_at', type: 'timestamp', nullable: true })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
-  deletedAt: Date | null;
+  @BeforeInsert()
+  async hashPasswordBeforeInsert() {
+    if (this.password && !this.password.startsWith('$2b$')) {
+      this.password = await bcrypt.hash(this.password, 12);
+    }
+  }
+
+  @BeforeUpdate()
+  async hashPasswordBeforeUpdate() {
+    if (this.password && !this.password.startsWith('$2b$')) {
+      this.password = await bcrypt.hash(this.password, 12);
+    }
+  }
+
+  async validatePassword(password: string): Promise<boolean> {
+    if (!this.password) return false;
+    return bcrypt.compare(password, this.password);
+  }
 }

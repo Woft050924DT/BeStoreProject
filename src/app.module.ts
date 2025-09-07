@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { Users } from './user/user.entity';
-import { GoogleModule } from './google/google.module';
 import { JwtModule } from './jwt/jwt.module';
 import { AuthModule } from './auth/auth.module';
 import {ConfigModule} from '@nestjs/config';
@@ -19,14 +18,13 @@ import {ConfigModule} from '@nestjs/config';
       port: 5432,
       username: 'postgres',
       password: 'dt2711',
-      database: 'StoreProject',
+      database: 'student',
       entities: [Users],
       synchronize: false,
       logging: true,
     }),
     
     UserModule,
-    GoogleModule,
     JwtModule,
     AuthModule,
   ],

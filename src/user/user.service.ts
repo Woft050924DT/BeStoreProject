@@ -18,20 +18,25 @@ export class UserService {
   async getAllUser(): Promise<Users[]> {
     return this.userRepository.find();
   }
-   async findById(id: string): Promise<Users | null> {
+  async findById(id: number): Promise<Users | null> {
     return this.userRepository.findOne({ where: { id } });
   }
   async findByEmail(email: string): Promise<Users | null> {
     return this.userRepository.findOne({ where: { email } });
   }
-  
-  async create (userData: Partial<Users>): Promise<Users> {
+  async findByUsername(username: string): Promise<Users | null> {
+    return this.userRepository.findOne({ where: { username } });
+  }
+
+  async create(userData: Partial<Users>): Promise<Users> {
     const user = this.userRepository.create(userData);
     return this.userRepository.save(user);
   }
 
-  async update (id: string, userData: Partial<Users>): Promise<Users | null> {
+  async update(id: number, userData: Partial<Users>): Promise<Users | null> {
     await this.userRepository.update(id, userData);
     return this.findById(id);
   }
+
+
 }
